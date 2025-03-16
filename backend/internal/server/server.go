@@ -2,6 +2,8 @@ package server
 
 import (
 	"net/http"
+
+	"github.com/CGuilhem/hackathon-notifier/backend/internal/websocket"
 )
 
 type logger interface {
@@ -11,6 +13,7 @@ type logger interface {
 }
 
 func NewServer(
+	wsManager *websocket.Manager,
 	getenv func(string) string,
 	logger logger,
 ) http.Handler {
@@ -19,6 +22,7 @@ func NewServer(
 
 	addRoutes(
 		mux,
+		wsManager,
 		getenv,
 		logger,
 	)

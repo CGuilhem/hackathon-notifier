@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/CGuilhem/hackathon-notifier/backend/internal/server"
+	"github.com/CGuilhem/hackathon-notifier/backend/internal/websocket"
 	"github.com/CGuilhem/hackathon-notifier/backend/logger"
 	"github.com/joho/godotenv"
 )
@@ -26,8 +27,12 @@ func run(ctx context.Context, getenv func(string) string, stdout io.Writer) erro
 	logger := logger.NewLogger(stdout)
 	logger.Info("Hackathon-notifier server start-up")
 
+	// Websockets manager initialization
+	wsManager := websocket.NewManager(logger)
+
 	// Http server initialization
 	srv := server.NewServer(
+		wsManager,
 		getenv,
 		logger,
 	)

@@ -3,10 +3,13 @@ package server
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/CGuilhem/hackathon-notifier/backend/internal/websocket"
 )
 
 func addRoutes(
 	mux *http.ServeMux,
+	wsManager *websocket.Manager,
 	getenv func(string) string,
 	logger logger,
 ) {
@@ -20,5 +23,10 @@ func addRoutes(
 			return
 		}
 		fmt.Println("/")
+	})
+
+	// Websockets
+	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		wsManager.ServeWS(w, r)
 	})
 }
